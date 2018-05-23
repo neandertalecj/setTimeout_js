@@ -1,0 +1,90 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Vue</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<style>
+			body{
+				margin: 40px;
+			}
+			ul{
+				list-style-type:  none;
+			}
+			#box{
+				width: 50px;
+				height: 50px;
+				background-color: orange;
+			}
+			#box1{
+				width: 50px;
+				height: 50px;
+				background-color: pink;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box"></div> <br/>
+		<div id="box1"></div><br/>
+		<button id="sto">Stop</button><br/><br/>
+		<div id="number"></div>
+	</body>
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+	<script>
+		var box = document.getElementById('box');
+		var box1 = document.getElementById('box1');
+		var sto = document.getElementById('sto');
+		var num = document.getElementById('number');
+		var a = 0;
+		var b = 0;
+
+		var set = setInterval(function(){
+			a += 10;
+			box.style.marginLeft =  a + 'px'
+		} , 100);//Не залежно від того чи закінчилась функція чи ні
+				// буде викликати функцію через однаковий інтервал часу позачергово
+				//чи може переповнити стек викликів і викликати помилку (якщо функ велика)
+
+		set1();
+		var stop; //Визначимо глобально, аби могли тормознути завдяки clearTimeout(stop);
+		         //бо в function set1() буде в зоні не видимості!!!
+		function set1(){
+			b += 12;
+			box1.style.marginLeft = b + 'px';
+			stop = setTimeout(set1, 100); //працює в черзі
+		}
+				// Зупиняємо переміщення боксів
+		setTimeout(function(){ 
+			clearInterval(set);
+			clearTimeout(stop);
+		}, 5000)
+
+		sto.onclick = function(){
+			clearInterval(set);
+			clearTimeout(stop);
+			clearTimeout(bre);
+		}
+
+		//при згортанні сторінках таймери тормозят для економії в різних браузерах по різному
+
+		var c = 10, bre; //коли "с" визначив після виклику ф. то при загрузці сторінки
+						//замість 10 було андефайнед а вже потім поч. відлік
+		tim();
+	
+		function tim(){
+			num.innerHTML = c;
+			c--;
+			bre = setTimeout(tim, 1000);
+
+			if(c<0){
+ 				clearTimeout(bre);
+			}
+		}
+		//setTimeout(tim, 0) одноразово, коли задамо "0" - то спочатку виконає усі дії передбачені в стеку, і постовить в наступну чергу даний колбек
+	</script>
+</html>
