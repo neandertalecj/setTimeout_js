@@ -20,6 +20,21 @@
 				height: 50px;
 				background-color: pink;
 			}
+			.cont{
+				text-align: center;
+			}
+			#cont_progress{
+				width: 80%;
+			}
+			.hidden-block{
+				display: none;
+				width: 200px;
+			    height: 150px;
+			    line-height: 9;
+			    background-color: pink;
+			    margin: 0 auto;
+			    margin-top: 15px;
+			}
 		</style>
 	</head>
 	<body>
@@ -27,6 +42,11 @@
 		<div id="box1"></div><br/>
 		<button id="sto">Stop</button><br/><br/>
 		<div id="number"></div>
+		<hr>
+		<div class="cont">
+			<progress id="cont_progress" value ="0" max="100"></progress>
+			<div class="hidden-block">Well done</div>
+		</div>
 	</body>
 
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -86,5 +106,28 @@
 			}
 		}
 		//setTimeout(tim, 0) одноразово, коли задамо "0" - то спочатку виконає усі дії передбачені в стеку, і постовить в наступну чергу даний колбек
+
+		//progress bar
+		const timer = (setStep) => {
+			let val = document.getElementById('cont_progress');//Через клас не хотіло 	працювати
+			let numb = 0;
+			
+			let tim = setInterval(() => {
+				if(numb <= 100){
+					val.value = numb;
+					numb++;
+				}else{
+					clearInterval(tim);
+					progressCallBack();
+				}
+			}, setStep);
+		}
+		timer(100);
+
+		var block = document.querySelector('.hidden-block');
+
+		function progressCallBack(){
+			block.style.display = 'block';
+		}
 	</script>
 </html>
